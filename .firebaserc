@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angularproject-157": {
+      "hosting": {
+        "AngularProject": [
+          "angularproject-157"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angularproject-157"
+  }
+}

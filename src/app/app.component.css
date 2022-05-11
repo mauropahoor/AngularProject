@@ -1,0 +1,35 @@
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color:  	#38220f;
+    color: white;
+    font-weight: 600;
+}
+.headerContent {
+    margin: 1em;
+}
+.bodyContent {
+    display: flex;
+    margin: 60px 30% 0 30%;
+    flex-direction: column;
+    background-color: #634832;
+}
+.headerTitle{
+    font-size: 1.5em;
+    text-decoration: inherit;
+}
+.complete{
+    background-color: #634832e1;
+    height: 50em;
+    margin: 0 30% 0 30%;
+}
+.loginStatus{
+    display: grid;
+    float: right;
+}

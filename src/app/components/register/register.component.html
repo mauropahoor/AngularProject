@@ -1,0 +1,23 @@
+<div class="font-color">
+    <div class="center">
+        <b class="title">Registrar:</b>
+    </div>
+    <div class="login">
+        <div class="inputs">
+            <div>
+                <label>Email:</label><br>
+                <input type="text" #email>
+            </div>
+            <div>
+                <label>Senha:</label><br>
+                <input type="password" #password>
+            </div>
+            <div>
+                <button (click)="onSignup(email.value, password.value)" style="margin-top: 0.6em;">Registrar</button>
+            </div>
+            <div>
+                <a routerLink="">Voltar</a>
+            </div>
+        </div>
+    </div>
+</div>
