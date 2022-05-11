@@ -16,8 +16,4 @@ export class HomeComponent implements OnInit {
 
   data = sessionStorage.getItem('isLoggedIn');
 
-  logout(){
-    this.firebaseService.logout();
-  }
-
 }
