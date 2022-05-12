@@ -2,6 +2,9 @@
     display: grid;
     place-items: center;
 }
+th{
+    text-align: center;
+}
 .font-color{
     color: white;
 }
@@ -9,11 +12,14 @@
     background-color:  	#967259;
     margin: 0rem 1.5rem 1.5rem 1.5rem;
 }
+.text{
+    padding: 1em;
+}
 .title{
     font-size: 2em;
 }
 button {
-    padding: 0.5em 1em;
+    padding: 0.3em 0.7em;
     border: unset;
     border-radius: 15px;
     color: #212121;

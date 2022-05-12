@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { numbers } from 'src/app/interfaces/numbers';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -15,5 +16,13 @@ export class HomeComponent implements OnInit {
   }
 
   data = sessionStorage.getItem('isLoggedIn');
+
+  test = true;
+
+  numbers: numbers[] = [
+    {num: 0, owner: "null"},
+    {num: 1, owner: "null"},
+    {num: 2, owner: "mauro"}
+  ];
 
 }
