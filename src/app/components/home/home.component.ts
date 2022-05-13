@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { numbers } from 'src/app/interfaces/numbers';
+import { Component, OnInit, Input } from '@angular/core';
+import { users } from 'src/app/interfaces/users';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -13,16 +13,20 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.firebaseService.checkLogin();
+    this.isRoot(); //Need to finish
   }
 
   data = sessionStorage.getItem('isLoggedIn');
+  root = false;
 
-  test = true;
+  users: users[] = [];
+  async getUsers(){
+    this.users = await this.firebaseService.getAllUsers();
+    console.log(this.users);
+  }
 
-  numbers: numbers[] = [
-    {num: 0, owner: "null"},
-    {num: 1, owner: "null"},
-    {num: 2, owner: "mauro"}
-  ];
-
+  isRoot(){ //Need to finish
+    if(this.firebaseService.isRoot() == true)
+      this.root = true;
+  }
 }

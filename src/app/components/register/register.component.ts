@@ -13,8 +13,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async onSignup(email:string, password:string){
-    await this.firebaseService.signup(email,password);
+  async register(email: string, password: string, name: string){
+    this.firebaseService.register(email, password, name);
   }
 
 }

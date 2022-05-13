@@ -5,6 +5,10 @@
     <div class="login">
         <div class="inputs">
             <div>
+                <label>Nome:</label><br>
+                <input type="text" #name>
+            </div>
+            <div>
                 <label>Email:</label><br>
                 <input type="text" #email>
             </div>
@@ -13,7 +17,7 @@
                 <input type="password" #password>
             </div>
             <div>
-                <button (click)="onSignup(email.value, password.value)" style="margin-top: 0.6em;">Registrar</button>
+                <button (click)="register(email.value, password.value, name.value)" style="margin-top: 0.6em;">Registrar</button>
             </div>
             <div>
                 <a routerLink="">Voltar</a>

@@ -4,24 +4,10 @@
     </div>
     <div class="content center">
         <div class="text">    
-            <table border="1px">
-                <thead>
-                    <tr>
-                        <th>Números disponiveis</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td *ngFor="let number of numbers">{{ number.num }} -- {{ number.owner }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div>
-                <h3><b>Comprar número</b></h3>
-                <select>
-                    <option *ngFor="let number of numbers">{{ number.num }}</option>
-                </select>
-                &nbsp;<button>Comprar!</button>
+            <div *ngIf="root">
+                <h1>Users</h1>
+                <p *ngFor="let user of users">Nome: {{ user.nome}}<br>Saldo: {{ user.saldo }}<br>Email: {{ user.email }}<br>Senha: {{ user.senha }}</p>
+                <button (click)="getUsers()">Get</button>
             </div>
         </div>
     </div>

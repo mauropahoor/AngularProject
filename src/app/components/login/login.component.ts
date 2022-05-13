@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { users } from 'src/app/interfaces/users';
+
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  async onSignin(email:string, password:string){
-    await this.firebaseService.signin(email,password);
+
+  async login(email:string, password:string){
+    this.firebaseService.login(email, password, []);
   }
 }
