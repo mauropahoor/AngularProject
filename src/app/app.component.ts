@@ -7,18 +7,19 @@ import { FirebaseService } from './services/firebase.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public firebaseService: FirebaseService) {
-
+  constructor(public firebaseService: FirebaseService) {    
    }
   
   ngOnInit(): void {
+    this.firebaseService.emmitLoginStatus.subscribe( status => this.isLoggedIn = status );
+    this.firebaseService.emmitEmail.subscribe( email => this.email = email );
   }
 
-  isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  isLoggedIn = "";
 
-  email = sessionStorage.getItem('email');
+  email = "";
 
-  title = 'AngularProject';
+  title = 'SiteSorteios';
 
   logout(){
     this.firebaseService.logout();

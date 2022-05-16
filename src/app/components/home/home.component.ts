@@ -13,14 +13,15 @@ export class HomeComponent implements OnInit {
   constructor(public firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
-    this.firebaseService.checkLogin();
-    this.isRoot(); //Need to finish
+    this.isRoot();
   }
 
-  data = sessionStorage.getItem('isLoggedIn');
   root = false;
+  editForm = false;
 
   users: users[] = [];
+  account: users[] = [];
+
   async getUsers(){
     this.users = await this.firebaseService.getAllUsers();
     console.log(this.users);
@@ -31,8 +32,22 @@ export class HomeComponent implements OnInit {
     this.users = await this.firebaseService.getAllUsers();
   }
 
-  isRoot(){ //Need to finish
-    if(this.firebaseService.isRoot() == true)
+  async isRoot(){
+    this.account = await this.firebaseService.isRoot(); //Get logged account status
+    if(this.account[0].root == true){
       this.root = true;
+    }
+    else{
+      this.root = false;
+    }
+  }
+
+  async openEditForm(){
+    this.editForm = true;
+  }
+
+  async editUser(id:string, email: string, password: string, name: string, balance: string, root: boolean){
+    this.firebaseService.editUser(id, email, password, name, balance, root);
+    //Need to finish
   }
 }

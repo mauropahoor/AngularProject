@@ -13,7 +13,44 @@
                     <p>Senha: {{ user.senha }}</p>
                     <p>Root?: {{ user.root }}</p>
                     <p>Id: {{ user.id }}</p>
-                    <button (click)="deleteUser(user.id)">  Delete</button>
+                    <button (click)="deleteUser(user.id)">Delete</button>
+                    &nbsp;
+                    <button (click)="openEditForm()">Edit</button>
+                    <div *ngIf="editForm == true">
+                        <br>
+                        <div>
+                            <label>Nome:</label>
+                            <input type="text" value="{{ user.nome }}" #name>  
+                        </div>
+                        <div>
+                            <label>Email:</label>
+                            <input type="text" value="{{ user.email }}" #email>  
+                        </div>
+                        <div>
+                            <label>Saldo:</label>
+                            <input type="text" value="{{ user.saldo }}" #balance>
+                        </div>
+                        <div>
+                            <label>Senha:</label>
+                            <input type="text" value="{{ user.senha }}" #password>
+                        </div>
+                        <div>
+                            <label>Root:</label>
+                            <select *ngIf="user.root; else noRoot" #root>
+                                <option value="true">{{ user.root }}</option>
+                                <option value="false">False</option>
+                            </select>
+                            <ng-template #noRoot>
+                                <select #root>
+                                    <option value="false">{{ user.root }}</option>
+                                    <option value="true">True</option>
+                                </select>
+                            </ng-template>
+                        </div>
+                        <div>
+                            <button (click)="editUser(user.id, email.value, password.value, name.value, balance.value, root)">Editar</button>
+                        </div>
+                    </div>
                     <hr>
                 </div>
                 <button (click)="getUsers()">Get</button>

@@ -6,24 +6,29 @@ import { Quote } from '@angular/compiler';
 import { users } from '../interfaces/users';
 import { waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { EventEmitter } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
 
-  userRef: AngularFirestoreCollection<users>;
+  emmitLoginStatus = new EventEmitter();
+  emmitEmail = new EventEmitter();
+
+  loggedEmail = ""; //Actual logged email
 
   constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore, private route: Router) { 
-    this.userRef = db.collection('/user');
+    
   }
 
   async login(email: string, password: string, users: Array<any>){
     users = await this.getAllUsers();
     users.forEach(user => {
       if(user.email == email && user.senha == password){
-        sessionStorage.setItem('isLoggedIn', 'True');
-        sessionStorage.setItem('email', email);
+        this.emmitLoginStatus.emit("True");
+        this.emmitEmail.emit(email);
+        this.loggedEmail = email;
         this.route.navigate(['/home']);    
       }      
     });
@@ -35,20 +40,19 @@ export class FirebaseService {
     return true;
   }
 
+  async editUser(id: string, email: string, password: string, name: string, balance: string, root: boolean){
+    const db = this.db.doc('user');
+    db.update({id: id, email: email, senha: password, nome: name, saldo: balance, root: root});
+    //Need to finish
+  }
+
   async deleteUser(id: string){
     const db = this.db.collection('/user');
     db.doc(id).delete();
   }
 
-  logout(){
-    sessionStorage.setItem('isLoggedIn', 'False');
-    this.route.navigate(['']);
-  }
-
-  checkLogin(){
-    if(sessionStorage.getItem('isLoggedIn') != 'True'){
-      window.location.href = "";
-    }
+  async logout(){
+    this.emmitLoginStatus.emit("False");
   }
 
   getAllUsers() {
@@ -56,16 +60,10 @@ export class FirebaseService {
       this.db.collection('user').valueChanges({ idField: 'id'}).subscribe(users => resolve(users));
     })
   }
-  isRoot(){
+  isRoot(){ //Return logged account attributes
     const user = this.db.collection<users>('user');
-    const email = sessionStorage.getItem('email');
-    console.log(this.db.collection('user', ref => ref.where('root', '==', true).where('email', '==', email)));
-    if(this.db.collection('user', ref => ref.where('root', '==', true).where('email', '==', email)))
-    {  
-      return true;
-    }
-    else
-      return false;
-    
+    return new Promise<any>((resolve)=> {
+      this.db.collection('user', ref => ref.where('email', '==', this.loggedEmail)).valueChanges({ idField: 'id'}).subscribe(account => resolve(account));
+    })
   }
 }
