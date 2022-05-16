@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { user } from '@angular/fire/auth';
 import { users } from 'src/app/interfaces/users';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -23,6 +24,11 @@ export class HomeComponent implements OnInit {
   async getUsers(){
     this.users = await this.firebaseService.getAllUsers();
     console.log(this.users);
+  }
+
+  async deleteUser(id: string){
+    this.firebaseService.deleteUser(id);
+    this.users = await this.firebaseService.getAllUsers();
   }
 
   isRoot(){ //Need to finish

@@ -13,8 +13,15 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  registerSucess = false;
+
   async register(email: string, password: string, name: string){
-    this.firebaseService.register(email, password, name);
+    if(await this.firebaseService.register(email, password, name)){
+      this.registerSucess = true;
+    }
+    else{
+      alert("Falha no registro");
+    }
   }
 
 }

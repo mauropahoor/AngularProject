@@ -6,7 +6,16 @@
         <div class="text">    
             <div *ngIf="root">
                 <h1>Users</h1>
-                <p *ngFor="let user of users">Nome: {{ user.nome}}<br>Saldo: {{ user.saldo }}<br>Email: {{ user.email }}<br>Senha: {{ user.senha }}</p>
+                <div *ngFor="let user of users">
+                    <p>Nome: {{ user.nome}}</p>
+                    <p>Saldo: {{ user.saldo }}</p>
+                    <p>Email: {{ user.email }}</p>
+                    <p>Senha: {{ user.senha }}</p>
+                    <p>Root?: {{ user.root }}</p>
+                    <p>Id: {{ user.id }}</p>
+                    <button (click)="deleteUser(user.id)">  Delete</button>
+                    <hr>
+                </div>
                 <button (click)="getUsers()">Get</button>
             </div>
         </div>

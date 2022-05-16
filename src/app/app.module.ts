@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { LoginComponent } from './components/login/login.component';
 import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideAuth,getAuth } from '@angular/fire/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { FirestoreModule, provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { FirebaseService } from './services/firebase.service';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -27,7 +28,8 @@ import { HomeComponent } from './components/home/home.component';
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    FirestoreModule,
+    FirestoreModule, //Check if isnt used
+    AngularFirestoreModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideDatabase(() => getDatabase()),
     provideAuth(() => getAuth()),

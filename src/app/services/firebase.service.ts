@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Quote } from '@angular/compiler';
 import { users } from '../interfaces/users';
+import { waitForAsync } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
 
-  constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore) { 
+  userRef: AngularFirestoreCollection<users>;
+
+  constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore, private route: Router) { 
+    this.userRef = db.collection('/user');
   }
 
   async login(email: string, password: string, users: Array<any>){
@@ -19,22 +24,25 @@ export class FirebaseService {
       if(user.email == email && user.senha == password){
         sessionStorage.setItem('isLoggedIn', 'True');
         sessionStorage.setItem('email', email);
-        window.location.href = "/home";
+        this.route.navigate(['/home']);    
       }      
     });
   }
 
-  async register(email: string, password: string, name: string){
-    const user = this.db.collection<users>('user');
-    user.add({ nome: name, email: email, senha: password, saldo: 0, root: false});
-    window.location.href = "";
+  async register(username: string, password: string, name: string){
+    const user = this.db.collection('/user');
+    user.add({ nome: name, email: username, senha: password, saldo: 0, root: false });
+    return true;
+  }
+
+  async deleteUser(id: string){
+    const db = this.db.collection('/user');
+    db.doc(id).delete();
   }
 
   logout(){
-    this.firebaseAuth.signOut();
-    localStorage.removeItem('user');
     sessionStorage.setItem('isLoggedIn', 'False');
-    window.location.href = "";
+    this.route.navigate(['']);
   }
 
   checkLogin(){
