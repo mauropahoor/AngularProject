@@ -17,16 +17,24 @@ export class FirebaseService {
   emmitEmail = new EventEmitter();
 
   loggedEmail = ""; //Actual logged email
+  isLoggedIn = false;
 
-  constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore, private route: Router) { 
+  constructor(private db: AngularFirestore, private route: Router) { 
     
+  }
+
+  async checkLogin(){
+    if(this.isLoggedIn == false){
+      this.route.navigate(['/']);  
+    }
   }
 
   async login(email: string, password: string, users: Array<any>){
     users = await this.getAllUsers();
     users.forEach(user => {
       if(user.email == email && user.senha == password){
-        this.emmitLoginStatus.emit("True");
+        this.emmitLoginStatus.emit(true);
+        this.isLoggedIn = true;
         this.emmitEmail.emit(email);
         this.loggedEmail = email;
         this.route.navigate(['/home']);    
@@ -41,9 +49,8 @@ export class FirebaseService {
   }
 
   async editUser(id: string, email: string, password: string, name: string, balance: string, root: boolean){
-    const db = this.db.doc('user');
-    db.update({id: id, email: email, senha: password, nome: name, saldo: balance, root: root});
-    //Need to finish
+    const db = this.db.collection('user');
+    db.doc(id).update({email: email, senha: password, nome: name, saldo: balance, root: root});
   }
 
   async deleteUser(id: string){

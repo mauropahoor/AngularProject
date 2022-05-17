@@ -3,7 +3,29 @@
         <b class="title">Bem vindo!!</b>
     </div>
     <div class="content center">
-        <div class="text">    
+        <div class="text">
+            <div>
+                <table border="1px">
+                    <thead>
+                        <tr>
+                            <th>Numeros</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let number of numbers">
+                            <td>{{ number.number }} -- {{ number.owner }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <p>Comprar número:</p>
+                <p>Seu saldo é de {{ account[0].saldo }} reais.</p>
+                <select #number>
+                    <option *ngFor="let number of numbers" value="{{ number.number }}">{{ number.number }}</option>
+                </select>
+                <button (click)="buyNumber(number.value)">Comprar</button>
+            </div>    
             <div *ngIf="root">
                 <h1>Users</h1>
                 <div *ngFor="let user of users">
@@ -54,6 +76,11 @@
                     <hr>
                 </div>
                 <button (click)="getUsers()">Get</button>
+            </div>
+            <div *ngIf="root">
+                <h1>Criar Jogo</h1>
+                <input placeholder="Quantidade de números" #length>
+                &nbsp;<button (click)="createGame(length.value)">Criar</button>
             </div>
         </div>
     </div>

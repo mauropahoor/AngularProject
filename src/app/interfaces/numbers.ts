@@ -1,4 +1,5 @@
 export interface numbers{
-    num: number;
+    id: number;
     owner: string;
+    number: number
 }

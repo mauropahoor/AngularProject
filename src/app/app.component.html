@@ -2,7 +2,7 @@
   <div class="headerContent">
     <a routerLink="" class="headerTitle">Sorteios</a>
   </div>
-  <div *ngIf="isLoggedIn == 'True'; else notLoggedIn">
+  <div *ngIf="isLoggedIn; else notLoggedIn">
     <span>Olá, {{ email }} <a (click)="logout()" href="#">(Logout)</a></span>
   </div>
   <ng-template #notLoggedIn>
