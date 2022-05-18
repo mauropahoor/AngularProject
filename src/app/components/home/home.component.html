@@ -5,15 +5,16 @@
     <div class="content center">
         <div class="text">
             <div>
-                <table border="1px">
+                <table class="table table-dark table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Numeros</th>
+                            <th>Preço: {{ price.price }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let number of numbers">
-                            <td>{{ number.number }} -- {{ number.owner }}</td>
+                        <tr>
+                            <td *ngFor="let number of numbers">{{ number.number }} -- {{ number.owner }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -24,6 +25,7 @@
                 <select #number>
                     <option *ngFor="let number of numbers" value="{{ number.number }}">{{ number.number }}</option>
                 </select>
+                &nbsp;
                 <button (click)="buyNumber(number.value)">Comprar</button>
             </div>    
             <div *ngIf="root">
@@ -81,6 +83,11 @@
                 <h1>Criar Jogo</h1>
                 <input placeholder="Quantidade de números" #length>
                 &nbsp;<button (click)="createGame(length.value)">Criar</button>
+            </div>
+            <div *ngIf="root">
+                <h1>Preço</h1>
+                <input placeholder="Preço" #price>
+                &nbsp;<button (click)="changePrice(price.value)">Change</button>
             </div>
         </div>
     </div>

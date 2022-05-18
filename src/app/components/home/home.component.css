@@ -2,9 +2,6 @@
     display: grid;
     place-items: center;
 }
-th{
-    text-align: center;
-}
 .font-color{
     color: white;
 }

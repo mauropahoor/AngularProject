@@ -60,6 +60,7 @@ export class FirebaseService {
 
   async logout(){
     this.emmitLoginStatus.emit("False");
+    this.emmitEmail.emit("");
   }
 
   getAllUsers() {

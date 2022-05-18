@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.getAllNumbers();
     this.isRoot();
+    this.getPrice();
     this.checkLogin(); //Check if the user is logged and not acess directly this component
   }
 
@@ -29,6 +30,8 @@ export class HomeComponent implements OnInit {
   users: users[] = [];
   account: users[] = [];
   numbers: numbers[] = [];
+  price: any = [];
+
 
   //User Functions:
 
@@ -78,10 +81,25 @@ export class HomeComponent implements OnInit {
     this.numbers = await this.sortitionService.getAllNumbers();
   }
 
-  async buyNumber(number: string){ //SOLVE BUG
+  async buyNumber(number: string){
     const numberInt = parseInt(number);
-    this.sortitionService.buyNumber(numberInt);
-    this.numbers = await this.sortitionService.getAllNumbers();
+    let loggedEmail = this.account[0].email;
+    if(this.account[0].saldo > this.price.price){  
+      await this.sortitionService.buyNumber(numberInt, loggedEmail);
+    }
+    else{
+      alert('Saldo insuficiente');
+    }
+    this.getAllNumbers();
   }
 
+  async changePrice(number: string){
+    const numberInt = parseFloat(number);
+    this.sortitionService.changePrice(numberInt);
+    this.price = await this.sortitionService.getPrice();
+  }
+
+  async getPrice(){
+    this.price = await this.sortitionService.getPrice();
+  }
 }

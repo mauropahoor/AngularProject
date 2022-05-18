@@ -10,10 +10,7 @@ import { FirebaseService } from './firebase.service';
 export class SortitionService {
 
   constructor(private db: AngularFirestore, private firebaseService: FirebaseService) {
-    this.firebaseService.emmitEmail.subscribe( email => this.loggedEmail = email );
-   }
-
-  loggedEmail = "";
+  }
 
   getAllNumbers() {
     return new Promise<any>((resolve)=> {
@@ -28,14 +25,27 @@ export class SortitionService {
     }
   }
 
-  numberSelected: any[] = [];
-  account: any[] = [];
-  buyNumber(number: number){ //SOLVE BUG
+  accountData: users[] = [];
+  async buyNumber(number: number, email: string){
+    this.accountData = await new Promise<any>((resolve)=> {
+      this.db.collection('user', ref => ref.where('email', '==', email)).valueChanges({ idField: 'id'}).subscribe(account => resolve(account));
+    })
+    let id = await new Promise<any>((resolve)=> {
+      this.db.collection('numbers', ref => ref.where('number', '==' , number)).valueChanges({ idField: 'id'}).subscribe(number => resolve(number[0].id));
+    }) 
+    console.log("Numero: ", id);
+    console.log("Conta: ", this.accountData[0].nome);
+    this.db.collection('numbers').doc(id).update({ owner: this.accountData[0].nome });
+  }
+
+  changePrice(number: number){
     const db = this.db.collection('numbers');
-    this.db.collection('numbers', ref => ref.where('number', '==' , number)).valueChanges({ idField: 'id'}).subscribe(number => this.numberSelected = number);
-    this.db.collection('user', ref => ref.where('email', '==', this.loggedEmail)).valueChanges({ idField: 'id'}).subscribe(account => this.account = account);
-    const id = this.numberSelected[0].id;
-    console.log("ONOME", this.account[0].nome);
-    db.doc(id).update({owner: this.account[0].nome });
+    db.doc('status').update({price: number });
+  }
+
+  getPrice(){
+    return new Promise<any>((resolve)=>{
+      this.db.collection('numbers').doc('status').valueChanges({ idField: 'id' }).subscribe(price => resolve(price));
+    })
   }
 }
