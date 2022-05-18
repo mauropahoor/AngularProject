@@ -14,19 +14,8 @@
 .headerContent {
     margin: 1em;
 }
-.bodyContent {
-    display: flex;
-    margin: 60px 30% 0 30%;
-    flex-direction: column;
-    background-color: #634832;
-}
 .headerTitle{
     font-size: 1.5em;
     text-decoration: inherit;
-}
-.complete{
-    background-color: #634832e1;
-    height: 50em;
-    margin: 0 30% 0 30%;
 }
 
