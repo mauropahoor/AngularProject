@@ -68,7 +68,7 @@ export class FirebaseService {
       this.db.collection('user').valueChanges({ idField: 'id'}).subscribe(users => resolve(users));
     })
   }
-  isRoot(){ //Return logged account attributes
+  loggedAccount(){ //Return logged account attributes
     const user = this.db.collection<users>('user');
     return new Promise<any>((resolve)=> {
       this.db.collection('user', ref => ref.where('email', '==', this.loggedEmail)).valueChanges({ idField: 'id'}).subscribe(account => resolve(account));

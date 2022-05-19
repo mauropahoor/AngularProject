@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllNumbers();
+    this.getUsers();
     this.isRoot();
     this.getPrice();
     this.checkLogin(); //Check if the user is logged and not acess directly this component
@@ -41,12 +42,12 @@ export class HomeComponent implements OnInit {
 
   async deleteUser(id: string){
     this.firebaseService.deleteUser(id);
-    this.users = await this.firebaseService.getAllUsers(); //Update in front-end list
+    this.getUsers(); //Update in front-end list
     this.editForm = false; //Bug if the editform is opened and the user is deleted
   }
 
   async isRoot(){
-    this.account = await this.firebaseService.isRoot(); //Get logged account status
+    this.account = await this.firebaseService.loggedAccount(); //Get logged account status
     if(this.account[0].root == true){
       this.root = true;
     }
@@ -65,7 +66,7 @@ export class HomeComponent implements OnInit {
 
   async editUser(id:string, email: string, password: string, name: string, balance: string, root: boolean){
     this.firebaseService.editUser(id, email, password, name, balance, root);
-    this.users = await this.firebaseService.getAllUsers(); //Update in front-end list
+    this.getUsers(); //Update in front-end list
     this.editForm = false;
   }
 
@@ -77,8 +78,8 @@ export class HomeComponent implements OnInit {
 
   async createGame(length: string) {
     const lenghtInt = parseInt(length);
-    this.sortitionService.createGame(lenghtInt);
-    this.numbers = await this.sortitionService.getAllNumbers();
+    await this.sortitionService.createGame(lenghtInt);
+    this.getAllNumbers();
   }
 
   async buyNumber(number: string){
@@ -90,16 +91,25 @@ export class HomeComponent implements OnInit {
     else{
       alert('Saldo insuficiente');
     }
-    this.getAllNumbers();
+    this.getAllNumbers(); //Update the data in front-end
+    this.account = await this.firebaseService.loggedAccount();
   }
 
   async changePrice(number: string){
     const numberInt = parseFloat(number);
     this.sortitionService.changePrice(numberInt);
-    this.price = await this.sortitionService.getPrice();
+    this.getAllNumbers();
   }
 
   async getPrice(){
     this.price = await this.sortitionService.getPrice();
   }
+
+  winnerName = '';
+  async createResult(){
+    await this.sortitionService.createResult(this.numbers);
+    let winner = await this.sortitionService.getWinner();
+    this.winnerName = winner.winner;
+  }
+
 }

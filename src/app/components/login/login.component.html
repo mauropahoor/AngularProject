@@ -3,7 +3,10 @@
         <b class="title">Login:</b>
     </div>
     <div class="login">
-        <div class="inputs">
+        <div class="text">
+            <div>
+                <h3 *ngIf="winner.winner != ''">O ultimo ganhador foi {{ winner.winner }}</h3>       
+            </div>
             <div>
                 <label>Email:</label><br>
                 <input type="text" #email>

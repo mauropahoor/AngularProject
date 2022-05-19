@@ -18,9 +18,16 @@ export class SortitionService {
     })
   }
 
-  createGame(length: number) {
+  async createGame(length: number) {
     const db = this.db.collection('numbers');
-    for(let i = 1; i <= length; i++){
+    let numbers: numbers[] = await this.getAllNumbers();  
+    for(let i = 0; i < numbers.length; i++){ //Delete old numbers  
+      let id = numbers[i].id;
+      let idString = id.toString();
+      db.doc(idString).delete();
+    }
+    db.doc('status').update({winner: '' });
+    for(let i = 1; i <= length; i++){ //Create a new one
       db.add({owner: 'null', number: i})
     }
   }
@@ -32,10 +39,17 @@ export class SortitionService {
     })
     let id = await new Promise<any>((resolve)=> {
       this.db.collection('numbers', ref => ref.where('number', '==' , number)).valueChanges({ idField: 'id'}).subscribe(number => resolve(number[0].id));
-    }) 
+    }) //Get id of the number to be bought
+    let price = await new Promise<any>((resolve)=> {
+      this.db.collection('numbers', ref => ref.where('number', '==' , number)).doc('status').valueChanges({ idField: 'id'}).subscribe(number => resolve(number));
+    })  
     console.log("Numero: ", id);
     console.log("Conta: ", this.accountData[0].nome);
+    console.log("Id da conta", this.accountData[0].id);
+    console.log("Preço: ",price.price);
+    let newBalance = this.accountData[0].saldo - price.price;
     this.db.collection('numbers').doc(id).update({ owner: this.accountData[0].nome });
+    this.db.collection('user').doc(this.accountData[0].id).update({ saldo: newBalance});
   }
 
   changePrice(number: number){
@@ -46,6 +60,22 @@ export class SortitionService {
   getPrice(){
     return new Promise<any>((resolve)=>{
       this.db.collection('numbers').doc('status').valueChanges({ idField: 'id' }).subscribe(price => resolve(price));
+    })
+  }
+
+  async createResult(number: numbers[]){
+    const db = this.db.collection('numbers');
+    let numbers: numbers[] = await this.getAllNumbers();    
+    let min = Math.ceil(0);
+    let max = Math.floor(numbers.length);
+    let result = Math.floor(Math.random() * (max - min + 1)) + min;
+    let winnerName = number[result].owner;
+    db.doc('status').update({winner: winnerName });
+  }
+
+  async getWinner(){
+    return new Promise<any>((resolve)=>{
+      this.db.collection('numbers').doc('status').valueChanges({ idField: 'id' }).subscribe(winner => resolve(winner));
     })
   }
 }
