@@ -33,7 +33,6 @@ export class HomeComponent implements OnInit {
   numbers: numbers[] = [];
   price: any = [];
 
-
   //User Functions:
 
   async getUsers(){
@@ -64,10 +63,11 @@ export class HomeComponent implements OnInit {
     this.editForm = true;
   }
 
-  async editUser(id:string, email: string, password: string, name: string, balance: string, root: boolean){
-    this.firebaseService.editUser(id, email, password, name, balance, root);
+  async editUser(id:string, email: string, password: string, name: string, balance: string){
+    this.firebaseService.editUser(id, email, password, name, balance);
     this.getUsers(); //Update in front-end list
     this.editForm = false;
+    //Solve bug
   }
 
   //Sortition Functions
@@ -84,21 +84,27 @@ export class HomeComponent implements OnInit {
 
   async buyNumber(number: string){
     const numberInt = parseInt(number);
-    let loggedEmail = this.account[0].email;
-    if(this.account[0].saldo > this.price.price){  
-      await this.sortitionService.buyNumber(numberInt, loggedEmail);
+    const isNumberUsed = await this.sortitionService.checkNumber(numberInt); 
+    console.log("Sera?: ", isNumberUsed);
+    if(isNumberUsed){
+      let loggedEmail = this.account[0].email;
+      if(this.account[0].saldo > this.price.price){  
+        await this.sortitionService.buyNumber(numberInt, loggedEmail);
+      }
+      else{
+        alert('Saldo insuficiente');
+      }
+      this.getAllNumbers(); //Update the data in front-end
+      this.account = await this.firebaseService.loggedAccount();
     }
-    else{
-      alert('Saldo insuficiente');
-    }
-    this.getAllNumbers(); //Update the data in front-end
-    this.account = await this.firebaseService.loggedAccount();
+    else
+      alert('Numero ja esta sendo usado!');
   }
 
   async changePrice(number: string){
     const numberInt = parseFloat(number);
     this.sortitionService.changePrice(numberInt);
-    this.getAllNumbers();
+    this.getPrice();
   }
 
   async getPrice(){

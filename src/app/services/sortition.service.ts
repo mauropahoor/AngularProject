@@ -52,6 +52,18 @@ export class SortitionService {
     this.db.collection('user').doc(this.accountData[0].id).update({ saldo: newBalance});
   }
 
+  async checkNumber(number: number){
+    let numberStatus = await new Promise<any>((resolve)=> {
+      this.db.collection('numbers', ref => ref.where('number', '==' , number)).valueChanges({ idField: 'id'}).subscribe(number => resolve(number));
+    });
+    if(numberStatus[0].owner == 'null' )
+      return true
+    else
+      return false
+
+
+  }
+
   changePrice(number: number){
     const db = this.db.collection('numbers');
     db.doc('status').update({price: number });

@@ -18,3 +18,12 @@
 td{
     text-align: center;
 }
+table{
+    word-break: break-all;
+    width: auto;
+    table-layout: fixed;
+}
+td, th{
+    max-width: 100%;
+    height: auto;
+}

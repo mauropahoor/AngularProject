@@ -11,16 +11,20 @@ import { SortitionService } from 'src/app/services/sortition.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private firebaseService: FirebaseService, private sortitionService: SortitionService) { }
-
-  ngOnInit(): void {
+  constructor(private firebaseService: FirebaseService, private sortitionService: SortitionService) { 
     this.getWinner();
   }
 
-  winner: any = {};
+  ngOnInit(): void {
+  }
+
+  winner: any = { winner: '' };
+  userIncorrect = false;
 
   async login(email:string, password:string){
-    this.firebaseService.login(email, password, []);
+    await this.firebaseService.login(email, password, []);
+    this.userIncorrect = true;
+    setTimeout(() => { this.userIncorrect = false; }, 3000);
   }
   async getWinner(){
     this.winner = await this.sortitionService.getWinner();

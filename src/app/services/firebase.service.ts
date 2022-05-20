@@ -40,6 +40,7 @@ export class FirebaseService {
         this.route.navigate(['/home']);    
       }      
     });
+
   }
 
   async register(username: string, password: string, name: string){
@@ -48,9 +49,16 @@ export class FirebaseService {
     return true;
   }
 
-  async editUser(id: string, email: string, password: string, name: string, balance: string, root: boolean){
+  async checkEmail(email: string){ //Return (if have) all the accounts with the email
     const db = this.db.collection('user');
-    db.doc(id).update({email: email, senha: password, nome: name, saldo: balance, root: root});
+    return new Promise<any>((resolve)=> {
+      this.db.collection('user', ref => ref.where('email', '==', email)).valueChanges({ idField: 'id'}).subscribe(account => resolve(account));
+    })
+  }
+
+  async editUser(id: string, email: string, password: string, name: string, balance: string){
+    const db = this.db.collection('user');
+    db.doc(id).update({email: email, senha: password, nome: name, saldo: balance});
   }
 
   async deleteUser(id: string){

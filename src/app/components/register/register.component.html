@@ -16,11 +16,11 @@
                 <label>Senha:</label><br>
                 <input type="password" #password>
             </div>
+            <div *ngIf="showMessage" style="margin-top: 0.6em;">
+                <span id="alert" >{{ message }}</span>
+            </div>
             <div>
                 <button (click)="register(email.value, password.value, name.value)" style="margin-top: 0.6em;">Registrar</button>
-            </div>
-            <div *ngIf="registerSucess">
-                <p>Registro concluido!</p>
             </div>
             <div>
                 <a routerLink="">Voltar</a>

@@ -1,59 +1,66 @@
 <div class="font-color">
     <div class="center">
-        <b class="title">Bem vindo!!</b>
+        <b class="title">Bem vindo, {{ account[0].nome }}!!</b>
     </div>
-    <div class="content center">
-        <div class="text">
-            <div>
-                <table class="table table-dark table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Numeros</th>
-                            <th>Preço: {{ price.price }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td *ngFor="let number of numbers">
-                                <span *ngIf="number.owner != 'null'; else noOwner ">
-                                    {{ number.number }}<br>{{ number.owner }}
-                                </span>
-                                <ng-template #noOwner>
-                                    <span>
-                                        {{ number.number }}<br>Vazio
+    <div class="content">
+        <div class="text center">
+            <div aria-label="normalUserMenu">
+                <div aria-label="buyMenu">
+                    <p>Comprar número:</p>
+                    <p>Seu saldo é de {{ account[0].saldo }} reais.</p>
+                    <select #number>
+                        <option *ngFor="let number of numbers" value="{{ number.number }}">{{ number.number }}</option>
+                    </select>
+                    &nbsp;
+                    <button (click)="buyNumber(number.value)">Comprar</button>
+                </div>
+                <br>
+                <div aria-label="numbersTable">
+                    <table class="table table-dark table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Números:</th>
+                                <th>Sorteio: 29/03</th>
+                                <th>Preço: {{ price.price }}</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let number of numbers; let i = index">
+                            <tr>
+                                <td>
+                                    {{ number.number }}
+                                </td>
+                                <td colspan="2">
+                                    <span *ngIf="number.owner != 'null'; else noOwner ">
+                                        {{ number.owner }}
                                     </span>
-                                </ng-template>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                <p>Comprar número:</p>
-                <p>Seu saldo é de {{ account[0].saldo }} reais.</p>
-                <select #number>
-                    <option *ngFor="let number of numbers" value="{{ number.number }}">{{ number.number }}</option>
-                </select>
-                &nbsp;
-                <button (click)="buyNumber(number.value)">Comprar</button>
+                                    <ng-template #noOwner>
+                                        <span>
+                                            Vazio
+                                        </span>
+                                    </ng-template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>    
-            <div *ngIf="root">
-                <div>
+            <div aria-label="rootUserMenu" *ngIf="root">
+                <div aria-label="sortNumber">
                     <h1>Sortear</h1>
                     <button (click)="createResult()">Sortear</button>
                     <p *ngIf="winnerName != ''">O ganhador foi {{ winnerName }}</p>
                 </div>
-                <div>
+                <div aria-label="createGame">
                     <h1>Criar Jogo</h1>
                     <input placeholder="Quantidade de números" #length>
                     &nbsp;<button (click)="createGame(length.value)">Criar</button>
                 </div>
-                <div>
+                <div aria-label="definePrice">
                     <h1>Preço</h1>
                     <input placeholder="Preço" #price>
                     &nbsp;<button (click)="changePrice(price.value)">Change</button>
                 </div>
-                <div>
+                <div aria-label="CRUD">
                     <h1>Users</h1>
                     <div *ngFor="let user of users">
                         <p>Nome: {{ user.nome}}</p>
@@ -62,9 +69,11 @@
                         <p>Senha: {{ user.senha }}</p>
                         <p>Root?: {{ user.root }}</p>
                         <p>Id: {{ user.id }}</p>
-                        <button (click)="deleteUser(user.id)">Delete</button>
-                        &nbsp;
-                        <button (click)="openEditForm()">Edit</button>
+                        <div *ngIf="user.root === false">
+                            <button (click)="deleteUser(user.id)">Delete</button>
+                            &nbsp;
+                            <button (click)="openEditForm()">Edit</button>
+                        </div>
                         <div *ngIf="editForm == true">
                             <br>
                             <div>
@@ -85,19 +94,10 @@
                             </div>
                             <div>
                                 <label>Root:</label>
-                                <select *ngIf="user.root; else noRoot" #root>
-                                    <option value="true">{{ user.root }}</option>
-                                    <option value="false">False</option>
-                                </select>
-                                <ng-template #noRoot>
-                                    <select #root>
-                                        <option value="false">{{ user.root }}</option>
-                                        <option value="true">True</option>
-                                    </select>
-                                </ng-template>
+                                <p>{{ user.root }}</p>
                             </div>
                             <div>
-                                <button (click)="editUser(user.id, email.value, password.value, name.value, balance.value, root)">Editar</button>
+                                <button (click)="editUser(user.id, email.value, password.value, name.value, balance.value)">Editar</button>
                             </div>
                         </div>
                         <hr>

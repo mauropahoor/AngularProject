@@ -15,6 +15,9 @@
                 <label>Senha:</label><br>
                 <input type="password" #password>
             </div>
+            <div *ngIf="userIncorrect" style="margin-top: 0.6em;">
+                <span id="alert" >Usuário ou senha inválidos.</span>
+            </div>
             <div>
                 <button (click)="login(email.value,password.value)" style="margin-top: 0.6em;">Login</button>
             </div>
