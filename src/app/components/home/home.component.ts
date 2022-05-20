@@ -82,6 +82,11 @@ export class HomeComponent implements OnInit {
     this.getAllNumbers();
   }
 
+  message: string = '';
+  error = [
+    {type:'Number already used', description:'Número já está em uso!'},
+    {type:'No money', description:'Saldo insuficiente.'}
+  ];
   async buyNumber(number: string){
     const numberInt = parseInt(number);
     const isNumberUsed = await this.sortitionService.checkNumber(numberInt); 
@@ -92,13 +97,16 @@ export class HomeComponent implements OnInit {
         await this.sortitionService.buyNumber(numberInt, loggedEmail);
       }
       else{
-        alert('Saldo insuficiente');
+        this.message = this.error[1].description;
+        setTimeout(() => { this.message = ''; }, 3000);
       }
       this.getAllNumbers(); //Update the data in front-end
       this.account = await this.firebaseService.loggedAccount();
     }
-    else
-      alert('Numero ja esta sendo usado!');
+    else{
+      this.message = this.error[0].description;
+      setTimeout(() => { this.message = ''; }, 3000);
+    }
   }
 
   async changePrice(number: string){

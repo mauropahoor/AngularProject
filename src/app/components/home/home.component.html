@@ -13,6 +13,9 @@
                     </select>
                     &nbsp;
                     <button (click)="buyNumber(number.value)">Comprar</button>
+                    <div *ngIf="message != ''" style="margin-top: 0.6em;">
+                        <span id="alert">{{ message }}</span>
+                    </div>
                 </div>
                 <br>
                 <div aria-label="numbersTable">
