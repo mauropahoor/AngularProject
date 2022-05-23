@@ -1,3 +1,4 @@
+import { NumberSymbol } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { user } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -17,11 +18,12 @@ export class HomeComponent implements OnInit {
 
   constructor(public firebaseService: FirebaseService, private route: Router, public sortitionService: SortitionService) { }
 
-  ngOnInit(): void {
-    this.getAllNumbers();
+  async ngOnInit() {
+    await this.getAllNumbers();
     this.getUsers();
     this.isRoot();
     this.getPrice();
+    this.getFilteredNumbers(this.pageSize);
     this.checkLogin(); //Check if the user is logged and not acess directly this component
   }
 
@@ -32,7 +34,50 @@ export class HomeComponent implements OnInit {
   account: users[] = [];
   numbers: numbers[] = [];
   price: any = [];
+  numbersFiltered: numbers[] = [];
+  //Front-end function:
 
+
+  position = 0;
+  pageSize = 5;
+  getFilteredNumbers(size: number){
+    this.numbersFiltered = [];
+    for(let i = this.position;i < size;i++){
+      this.numbersFiltered.push(this.numbers[i]);
+    }
+  }
+
+  showMessage = false
+  backPageTable(){
+    if(this.position > 0){
+      this.numbersFiltered = [];
+      this.position -= this.pageSize;
+      let start = this.position;
+      for(let i = start;i < start+this.pageSize;i++){
+        this.numbersFiltered.push(this.numbers[i]);
+      }
+    }
+    else{
+      this.showMessage = true;
+      setTimeout(() => { this.showMessage = false; }, 3000);
+    }
+  }
+
+  nextPageTable(){
+    if(this.position < this.numbers.length - this.pageSize){
+      this.numbersFiltered = [];
+      this.position += this.pageSize;
+      let start = this.position;
+      for(let i = start;i < start+this.pageSize;i++){
+        this.numbersFiltered.push(this.numbers[i]);
+      }
+    }
+    else{
+      this.showMessage = true;
+      setTimeout(() => { this.showMessage = false; }, 3000);
+    }
+  }
+  
   //User Functions:
 
   async getUsers(){
@@ -90,7 +135,6 @@ export class HomeComponent implements OnInit {
   async buyNumber(number: string){
     const numberInt = parseInt(number);
     const isNumberUsed = await this.sortitionService.checkNumber(numberInt); 
-    console.log("Sera?: ", isNumberUsed);
     if(isNumberUsed){
       let loggedEmail = this.account[0].email;
       if(this.account[0].saldo > this.price.price){  
@@ -100,7 +144,8 @@ export class HomeComponent implements OnInit {
         this.message = this.error[1].description;
         setTimeout(() => { this.message = ''; }, 3000);
       }
-      this.getAllNumbers(); //Update the data in front-end
+      await this.getAllNumbers(); //Update the data in front-end
+      this.getFilteredNumbers(this.position + this.pageSize);
       this.account = await this.firebaseService.loggedAccount();
     }
     else{

@@ -9,7 +9,7 @@
                     <p>Comprar número:</p>
                     <p>Seu saldo é de {{ account[0].saldo }} reais.</p>
                     <select #number>
-                        <option *ngFor="let number of numbers" value="{{ number.number }}">{{ number.number }}</option>
+                        <option *ngFor="let number of numbersFiltered" value="{{ number.number }}">{{ number.number }}</option>
                     </select>
                     &nbsp;
                     <button (click)="buyNumber(number.value)">Comprar</button>
@@ -22,12 +22,12 @@
                     <table class="table table-dark table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>Números:</th>
+                                <th>Números({{ this.numbers.length }}):</th>
                                 <th>Sorteio: 29/03</th>
                                 <th>Preço: {{ price.price }}</th>
                             </tr>
                         </thead>
-                        <tbody *ngFor="let number of numbers; let i = index">
+                        <tbody *ngFor="let number of numbersFiltered">
                             <tr>
                                 <td>
                                     {{ number.number }}
@@ -45,6 +45,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    <p>
+                        <span id="alert" *ngIf="showMessage == true">Não é possivel voltar/continuar</span>
+                    </p>
+                    <p>
+                        <button (click)="backPageTable()" >Back</button>&nbsp;
+                        <button (click)="nextPageTable()" >Next</button>
+                    </p>
                 </div>
             </div>    
             <div aria-label="rootUserMenu" *ngIf="root">

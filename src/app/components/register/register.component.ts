@@ -14,7 +14,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  showMessage = false;
 
   error = [
     {type: 'noName', description: 'Não deixe o campo de nome vazio!'},
@@ -27,7 +26,6 @@ export class RegisterComponent implements OnInit {
   async register(email: string, password: string, name: string){
     let emailCheck: users[] = [];
     emailCheck = await this.firebaseService.checkEmail(email);
-    this.showMessage = true;
     if(name == ''){
       this.message = this.error[0].description;
     }
@@ -44,7 +42,7 @@ export class RegisterComponent implements OnInit {
       await this.firebaseService.register(email, password, name);
       this.message = "Registro concluido!";
     }
-    setTimeout(() => { this.showMessage = false; }, 3000);
+    setTimeout(() => { this.message = ""; }, 3000);
   }
 
 }

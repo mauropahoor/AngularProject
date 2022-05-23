@@ -16,7 +16,7 @@
                 <label>Senha:</label><br>
                 <input type="password" #password>
             </div>
-            <div *ngIf="showMessage" style="margin-top: 0.6em;">
+            <div *ngIf="message != ''" style="margin-top: 0.6em;">
                 <span id="alert" >{{ message }}</span>
             </div>
             <div>
