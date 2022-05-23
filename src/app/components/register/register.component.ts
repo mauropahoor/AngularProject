@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
     {type: 'noPassword', description: 'Não deixe o campo de senha vazio!'},
     {type: 'noEmail', description: 'Não deixe o campo de email vazio!'},
     {type: 'emailAlreadyUsed', description: 'Este email ja foi utilizado!'},
+    {type: 'invalidEmail', description: 'Digite um email válido!'}
   ];
 
   message: string = "";
@@ -38,11 +39,23 @@ export class RegisterComponent implements OnInit {
     else if(emailCheck.length > 0){ //Check if have one or more accounts with this email
       this.message = this.error[3].description;
     }
+    else if(this.validateEmail(email)){
+      this.message = this.error[4].description;
+    }
     else{
       await this.firebaseService.register(email, password, name);
       this.message = "Registro concluido!";
     }
     setTimeout(() => { this.message = ""; }, 3000);
+  }
+
+  validateEmail (emailAdress: string){
+    let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (emailAdress.match(regexEmail)) {
+      return false; 
+    } else {
+      return true; //Return true if the string isnt in a email type 
+    } 
   }
 
 }

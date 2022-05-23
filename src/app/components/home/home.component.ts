@@ -38,9 +38,9 @@ export class HomeComponent implements OnInit {
   //Front-end function:
 
 
-  position = 0;
-  pageSize = 5;
-  getFilteredNumbers(size: number){
+  position = 0; //Position in table page
+  pageSize = 5; //Size of each table
+  getFilteredNumbers(size: number){ //Filter the table by the pageSize
     this.numbersFiltered = [];
     for(let i = this.position;i < size;i++){
       this.numbersFiltered.push(this.numbers[i]);

@@ -45,7 +45,7 @@ export class FirebaseService {
 
   async register(username: string, password: string, name: string){
     const user = this.db.collection('/user');
-    user.add({ nome: name, email: username, senha: password, saldo: 0, root: false });
+    user.add({ nome: name, email: username, senha: password, saldo: 20, root: false });
     return true;
   }
 
