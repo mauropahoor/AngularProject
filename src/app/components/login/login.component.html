@@ -1,29 +1,25 @@
-<div class="font-color">
-    <div class="center">
-        <b class="title">Login:</b>
-    </div>
-    <div class="login">
-        <div class="text">
-            <div>
-                <h3 *ngIf="winner.winner != ''">O ultimo ganhador foi {{ winner.winner }}</h3>       
-            </div>
-            <div>
-                <label>Email:</label><br>
-                <input type="text" #email>
-            </div>
-            <div>
-                <label>Senha:</label><br>
-                <input type="password" #password>
-            </div>
-            <div *ngIf="userIncorrect" style="margin-top: 0.6em;">
-                <span id="alert" >Usuário ou senha inválidos.</span>
-            </div>
-            <div>
-                <button (click)="login(email.value,password.value)" style="margin-top: 0.6em;">Login</button>
-            </div>
-            <div>
-                <a routerLink="register">Cadastre-se</a>
-            </div>
+<div class="container">
+    <div class="text">
+        <div>
+            <h3 *ngIf="winner.winner != ''">O ultimo ganhador foi {{ winner.winner }}</h3>       
+        </div>
+        <div>
+            <label>Email:</label><br>
+            <input type="text"  #email>
+        </div>
+        <div>
+            <label>Senha:</label><br>
+            <input type="password" #password>
+        </div>
+        <div *ngIf="userIncorrect" style="margin-top: 0.6em;">
+            <span id="alert" >Usuário ou senha inválidos.</span>
+        </div>
+        <br>
+        <div>
+            <button (click)="login(email.value,password.value)" class="login-btn">Login</button>
+        </div>
+        <div>
+            <a routerLink="register">Cadastre-se</a>
         </div>
     </div>
 </div>

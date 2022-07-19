@@ -1,118 +1,114 @@
-<div class="font-color">
-    <div class="center">
+<div class="container center">
+    <div>
         <b class="title">Bem vindo, {{ account[0].nome }}!!</b>
     </div>
-    <div class="content">
-        <div class="text center">
-            <div aria-label="normalUserMenu">
-                <div aria-label="buyMenu">
-                    <p>Comprar número:</p>
-                    <p>Seu saldo é de {{ account[0].saldo }} reais.</p>
-                    <select #number>
-                        <option *ngFor="let number of numbersFiltered" value="{{ number.number }}">{{ number.number }}</option>
-                    </select>
+    <div aria-label="normalUserMenu">
+        <div aria-label="buyMenu">
+            <p>Comprar número:</p>
+            <p>Seu saldo é de {{ account[0].saldo }} reais.</p>
+            <select #number>
+                <option *ngFor="let number of numbersFiltered" value="{{ number.number }}">{{ number.number }}</option>
+            </select>
+            &nbsp;
+            <button (click)="buyNumber(number.value)">Comprar</button>
+            <div *ngIf="message != ''" style="margin-top: 0.6em;">
+                <span id="alert">{{ message }}</span>
+            </div>
+        </div>
+        <br>
+        <div aria-label="numbersTable">
+            <table class="table table-dark table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Números({{ this.numbers.length }}):</th>
+                        <th>Sorteio: 29/03</th>
+                        <th>Preço: {{ price.price }}</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let number of numbersFiltered">
+                    <tr>
+                        <td>
+                            {{ number.number }}
+                        </td>
+                        <td colspan="2">
+                            <span *ngIf="number.owner != 'null'; else noOwner ">
+                                {{ number.owner }}
+                            </span>
+                            <ng-template #noOwner>
+                                <span>
+                                    Vazio
+                                </span>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span id="alert" *ngIf="showMessage == true">Não é possivel voltar/continuar</span>
+            </p>
+            <p>
+                <button (click)="backPageTable()" >Back</button>&nbsp;
+                <button (click)="nextPageTable()" >Next</button>
+            </p>
+        </div>
+    </div>    
+    <div aria-label="rootUserMenu" *ngIf="root">
+        <div aria-label="sortNumber">
+            <h1>Sortear</h1>
+            <button (click)="createResult()">Sortear</button>
+            <p *ngIf="winnerName != ''">O ganhador foi {{ winnerName }}</p>
+        </div>
+        <div aria-label="createGame">
+            <h1>Criar Jogo</h1>
+            <input placeholder="Quantidade de números" #length><br>
+            &nbsp;<button (click)="createGame(length.value)">Criar</button>
+        </div>
+        <div aria-label="definePrice">
+            <h1>Preço</h1>
+            <input placeholder="Preço" #price><br>
+            &nbsp;<button (click)="changePrice(price.value)">Change</button>
+        </div>
+        <div aria-label="CRUD">
+            <h1>Users</h1>
+            <div *ngFor="let user of users">
+                <p>Nome: {{ user.nome}}</p>
+                <p>Saldo: {{ user.saldo }}</p>
+                <p>Email: {{ user.email }}</p>
+                <p>Senha: {{ user.senha }}</p>
+                <p>Root?: {{ user.root }}</p>
+                <p>Id: {{ user.id }}</p>
+                <div *ngIf="user.root === false">
+                    <button (click)="deleteUser(user.id)">Delete</button>
                     &nbsp;
-                    <button (click)="buyNumber(number.value)">Comprar</button>
-                    <div *ngIf="message != ''" style="margin-top: 0.6em;">
-                        <span id="alert">{{ message }}</span>
+                    <button (click)="openEditForm()">Edit</button>
+                </div>
+                <div *ngIf="editForm == true">
+                    <br>
+                    <div>
+                        <label>Nome:</label>
+                        <input type="text" value="{{ user.nome }}" #name>  
+                    </div>
+                    <div>
+                        <label>Email:</label>
+                        <input type="text" value="{{ user.email }}" #email>  
+                    </div>
+                    <div>
+                        <label>Saldo:</label>
+                        <input type="text" value="{{ user.saldo }}" #balance>
+                    </div>
+                    <div>
+                        <label>Senha:</label>
+                        <input type="text" value="{{ user.senha }}" #password>
+                    </div>
+                    <div>
+                        <label>Root:</label>
+                        <p>{{ user.root }}</p>
+                    </div>
+                    <div>
+                        <button (click)="editUser(user.id, email.value, password.value, name.value, balance.value)">Editar</button>
                     </div>
                 </div>
-                <br>
-                <div aria-label="numbersTable">
-                    <table class="table table-dark table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Números({{ this.numbers.length }}):</th>
-                                <th>Sorteio: 29/03</th>
-                                <th>Preço: {{ price.price }}</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngFor="let number of numbersFiltered">
-                            <tr>
-                                <td>
-                                    {{ number.number }}
-                                </td>
-                                <td colspan="2">
-                                    <span *ngIf="number.owner != 'null'; else noOwner ">
-                                        {{ number.owner }}
-                                    </span>
-                                    <ng-template #noOwner>
-                                        <span>
-                                            Vazio
-                                        </span>
-                                    </ng-template>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>
-                        <span id="alert" *ngIf="showMessage == true">Não é possivel voltar/continuar</span>
-                    </p>
-                    <p>
-                        <button (click)="backPageTable()" >Back</button>&nbsp;
-                        <button (click)="nextPageTable()" >Next</button>
-                    </p>
-                </div>
-            </div>    
-            <div aria-label="rootUserMenu" *ngIf="root">
-                <div aria-label="sortNumber">
-                    <h1>Sortear</h1>
-                    <button (click)="createResult()">Sortear</button>
-                    <p *ngIf="winnerName != ''">O ganhador foi {{ winnerName }}</p>
-                </div>
-                <div aria-label="createGame">
-                    <h1>Criar Jogo</h1>
-                    <input placeholder="Quantidade de números" #length>
-                    &nbsp;<button (click)="createGame(length.value)">Criar</button>
-                </div>
-                <div aria-label="definePrice">
-                    <h1>Preço</h1>
-                    <input placeholder="Preço" #price>
-                    &nbsp;<button (click)="changePrice(price.value)">Change</button>
-                </div>
-                <div aria-label="CRUD">
-                    <h1>Users</h1>
-                    <div *ngFor="let user of users">
-                        <p>Nome: {{ user.nome}}</p>
-                        <p>Saldo: {{ user.saldo }}</p>
-                        <p>Email: {{ user.email }}</p>
-                        <p>Senha: {{ user.senha }}</p>
-                        <p>Root?: {{ user.root }}</p>
-                        <p>Id: {{ user.id }}</p>
-                        <div *ngIf="user.root === false">
-                            <button (click)="deleteUser(user.id)">Delete</button>
-                            &nbsp;
-                            <button (click)="openEditForm()">Edit</button>
-                        </div>
-                        <div *ngIf="editForm == true">
-                            <br>
-                            <div>
-                                <label>Nome:</label>
-                                <input type="text" value="{{ user.nome }}" #name>  
-                            </div>
-                            <div>
-                                <label>Email:</label>
-                                <input type="text" value="{{ user.email }}" #email>  
-                            </div>
-                            <div>
-                                <label>Saldo:</label>
-                                <input type="text" value="{{ user.saldo }}" #balance>
-                            </div>
-                            <div>
-                                <label>Senha:</label>
-                                <input type="text" value="{{ user.senha }}" #password>
-                            </div>
-                            <div>
-                                <label>Root:</label>
-                                <p>{{ user.root }}</p>
-                            </div>
-                            <div>
-                                <button (click)="editUser(user.id, email.value, password.value, name.value, balance.value)">Editar</button>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                </div>
+                <hr>
             </div>
         </div>
     </div>
